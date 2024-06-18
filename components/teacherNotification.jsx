@@ -140,97 +140,110 @@ const TeacherNotification = () => {
               <CardTitle>Create Notification</CardTitle>
             </CardHeader>
             <CardContent className='pb-10'>
-              <div className='grid gap-6 grid-cols-1 md:grid-cols-2 '>
-                <div className='grid gap-4 h-80'>
-                  <form className='grid gap-4' onSubmit={createNotification}>
-                    <div className='grid gap-2'>
-                      <Label htmlFor='title'>Title</Label>
-                      <Input
-                        id='title'
-                        placeholder='Enter notification title'
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                    </div>
-                    <div className='grid gap-2'>
-                      <Label htmlFor='content'>Content</Label>
-                      <Textarea
-                        id='content'
-                        placeholder='Enter notification content'
-                        rows={4}
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                      />
-                    </div>
-                    <div className='grid gap-2'>
-                      <Label htmlFor='schedule'>Schedule</Label>
+              <div className='grid gap-6 grid-cols-1 lg:grid-cols-2 '>
+              <div className='grid gap-4 '>
+  <form className='grid gap-4 grid-cols-1 ' onSubmit={createNotification}>
+    {/* Title Input */}
+    <div className='grid gap-2'>
+      <Label htmlFor='title'>Title</Label>
+      <Input
+        id='title'
+        className='w-full px-4 py-2 border rounded-md'
+        placeholder='Enter notification title'
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+    </div>
 
-                      <Input
-                        className='flex-1'
-                        id='schedule'
-                        type='datetime-local'
-                        value={schedule}
-                        onChange={(e) => setSchedule(e.target.value)}
-                      />
-                    </div>
-                    <div className='grid gap-2'>
-                      <Label htmlFor='icon'>Icon</Label>
-                      <div className='flex items-center justify-between gap-2'>
-                        <div className='flex items-center gap-2'>
-                        <Select onValueChange={(value) => setIcon(value)}>
-                          <SelectTrigger className='w-[180px]'>
-                            <SelectValue
-                              placeholder='Select a Icon'
-                              value={icon}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value='CalendarIcon'>
-                                Calendar Icon
-                              </SelectItem>
-                              <SelectItem value='ClipboardCheckIcon'>
-                                Check Icon
-                              </SelectItem>
-                              <SelectItem value='CircleAlertIcon'>
-                                Alert Icon
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        {iconMap[icon]}
+    {/* Content Textarea */}
+    <div className='grid gap-2'>
+      <Label htmlFor='content'>Content</Label>
+      <Textarea
+        id='content'
+        className='w-full px-4 py-2 border rounded-md'
+        placeholder='Enter notification content'
+        rows={4}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+    </div>
 
-                        <Select onValueChange={(value) => setTarget(value)}>
-                          <SelectTrigger className='w-[180px]'>
-                            <SelectValue
-                              placeholder='Select a Target'
-                              value={target}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value='everyone'>
-                                Everyone
-                              </SelectItem>
-                             
-                          {students?.map((student)=>(
-                                <SelectItem key={student._id} value={student._id}>
-                                {student.name}
-                              </SelectItem>
-                          ))}
+    {/* Schedule Input */}
+    <div className='grid gap-2'>
+      <Label htmlFor='schedule'>Schedule</Label>
+      <Input
+        id='schedule'
+        className='w-full px-4 py-2 border rounded-md'
+        type='datetime-local'
+        value={schedule}
+        onChange={(e) => setSchedule(e.target.value)}
+      />
+    </div>
 
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
+    {/* Icon Selection */}
+    <div className='grid gap-5 grid-cols-2 items-end'>
+      <div>
+      <Label htmlFor='icon'>Icon</Label>
+      <Select onValueChange={(value) => setIcon(value)}>
+        <SelectTrigger className='w-full'>
+          <SelectValue
+            placeholder='Select an Icon'
+            value={icon}
+          />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value='CalendarIcon'>
+              Calendar Icon
+            </SelectItem>
+            <SelectItem value='ClipboardCheckIcon'>
+              Check Icon
+            </SelectItem>
+            <SelectItem value='CircleAlertIcon'>
+              Alert Icon
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      </div>
+      
+      <div className="w-fit">
+      {iconMap[icon]}
+      </div>
+    </div>
 
-                        </div>
-                        
-                        <Button type='submit'>Create New</Button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div className='grid gap-4'>
+    {/* Target Selection */}
+    <div className='grid gap-2'>
+      <Label htmlFor='target'>Target</Label>
+      <Select onValueChange={(value) => setTarget(value)}>
+        <SelectTrigger className='w-full'>
+          <SelectValue
+            placeholder='Select a Target'
+            value={target}
+          />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value='everyone'>
+              Everyone
+            </SelectItem>
+            {/* Map over students for specific targets */}
+            {students?.map((student) => (
+              <SelectItem key={student._id} value={student._id}>
+                {student.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* Submit Button */}
+    <Button className='col-span-full' type='submit'>Create New</Button>
+  </form>
+</div>
+
+                <div className='grid gap-4 mt-48 lg:mt-0'>
                   <div className='flex items-center justify-between'>
                     <h2 className='text-2xl font-bold'>Notifications</h2>
                   </div>

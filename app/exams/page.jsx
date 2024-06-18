@@ -118,14 +118,14 @@ const page = () => {
         <div className='mt-8'>
           <Card>
             <CardHeader>
-              <CardTitle>Exams</CardTitle>
-              <CardDescription>
+              <CardTitle className='hidden md:block'>Exams</CardTitle>
+              <CardDescription className='hidden md:block'>
                 Create and manage exams for your students.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div>
+                <div className='order-2 md:order-1'>
                   <h3 className='text-lg font-medium mb-4'>Create Exam</h3>
                   <form>
                     <div className='space-y-4'>
@@ -178,7 +178,7 @@ const page = () => {
                     </div>
                   </form>
                 </div>
-                <div>
+                <div className='order-1 md:order-2'>
                   <h3 className='text-lg font-medium mb-4'>Exams</h3>
                   <Table>
                     <TableHeader>
@@ -249,7 +249,7 @@ const page = () => {
                 {/*  */}
                       
 
-                <div>
+                <div className='order-3'>
                   <h3 className='text-lg font-medium mb-4'>Questions</h3>
                   <Table>
                     <TableHeader>

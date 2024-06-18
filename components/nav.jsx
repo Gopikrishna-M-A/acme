@@ -10,46 +10,60 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "@/components/ui/dropdown-menu"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import TeacherNav from "./teacherNav";
+import StudentNav from "./studentNav";
 
-import { useSession } from "next-auth/react"
+import { SidePanel } from "./sidePanel"
+
+import { useSession, signIn, signOut } from "next-auth/react";
 import axios from "axios"
 
 const iconMap = {
   CalendarIcon: (
-    <div className="rounded-full bg-blue-100 p-2 text-blue-500 dark:bg-blue-900 dark:text-blue-400">
-      <CalendarIcon className="h-5 w-5" />
+    <div className='rounded-full bg-blue-100 p-2 text-blue-500 dark:bg-blue-900 dark:text-blue-400'>
+      <CalendarIcon className='h-5 w-5' />
     </div>
   ),
   ClipboardCheckIcon: (
-    <div className="rounded-full bg-green-100 p-2 text-green-500 dark:bg-green-900 dark:text-green-400">
-      <ClipboardCheckIcon className="h-5 w-5" />
+    <div className='rounded-full bg-green-100 p-2 text-green-500 dark:bg-green-900 dark:text-green-400'>
+      <ClipboardCheckIcon className='h-5 w-5' />
     </div>
   ),
   CircleAlertIcon: (
-    <div className="rounded-full bg-yellow-100 p-2 text-yellow-500 dark:bg-yellow-900 dark:text-yellow-400">
-      <CircleAlertIcon className="h-5 w-5" />
+    <div className='rounded-full bg-yellow-100 p-2 text-yellow-500 dark:bg-yellow-900 dark:text-yellow-400'>
+      <CircleAlertIcon className='h-5 w-5' />
     </div>
   ),
-};
+}
 
 const calculateTimeAgo = (createdAt) => {
-  const now = new Date();
-  const created = new Date(createdAt);
-  const diffMs = now - created;
+  const now = new Date()
+  const created = new Date(createdAt)
+  const diffMs = now - created
 
   // Convert milliseconds to hours and minutes
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
 
   if (diffHours === 0 && diffMinutes === 0) {
-    return `just now`;
+    return `just now`
   } else if (diffHours === 0) {
-    return `${diffMinutes} ${diffMinutes === 1 ? "minute" : "minutes"} ago`;
+    return `${diffMinutes} ${diffMinutes === 1 ? "minute" : "minutes"} ago`
   } else {
-    return `${diffHours} ${diffHours === 1 ? "hour" : "hours"} ago`;
+    return `${diffHours} ${diffHours === 1 ? "hour" : "hours"} ago`
   }
-};
-
+}
 
 const nav = () => {
   const [notifications, setNotifications] = useState()
@@ -57,7 +71,7 @@ const nav = () => {
   const [user, setUser] = useState(session?.user)
 
   useEffect(() => {
-    if(user){
+    if (user) {
       getNotifications()
     }
   }, [])
@@ -66,44 +80,81 @@ const nav = () => {
     try {
       const specificResponse = await axios.get(
         `/api/notifications?target=specific&userId=${user?._id}`
-      );
-  
+      )
+
       const everyoneResponse = await axios.get(
         `/api/notifications?target=everyone`
-      );
-  
-      const specificNotifications = specificResponse.data.notifications;
-      const everyoneNotifications = everyoneResponse.data.notifications;
-  
+      )
+
+      const specificNotifications = specificResponse.data.notifications
+      const everyoneNotifications = everyoneResponse.data.notifications
+
       // Combine specific and everyone notifications
-      const allNotifications = [...specificNotifications, ...everyoneNotifications];
-  
+      const allNotifications = [
+        ...specificNotifications,
+        ...everyoneNotifications,
+      ]
+
       // Sort combined notifications by createdAt timestamp
       allNotifications.sort((a, b) => {
-        const now = new Date();
-        const createdA = new Date(a.createdAt);
-        const timeAgoA = now - createdA;
-        const createdB = new Date(b.createdAt);
-        const timeAgoB = now - createdB;
-  
+        const now = new Date()
+        const createdA = new Date(a.createdAt)
+        const timeAgoA = now - createdA
+        const createdB = new Date(b.createdAt)
+        const timeAgoB = now - createdB
+
         // Compare timestamps based on timeAgo (assuming it's in a readable format)
-        return timeAgoA - timeAgoB;
-      });
-  
+        return timeAgoA - timeAgoB
+      })
+
       // Update state with sorted notifications (get the latest 3)
-      setNotifications(allNotifications.slice(0, 3));
+      setNotifications(allNotifications.slice(0, 3))
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error)
       // Handle error state or logging as necessary
     }
-  };
+  }
   return (
     <header className='sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-950 md:h-20'>
       <div className='flex items-center gap-4'>
-        <Button className='lg:hidden' size='icon' variant='ghost'>
-          <MenuIcon className='h-6 w-6' />
-          <span className='sr-only'>Toggle navigation</span>
-        </Button>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button className='lg:hidden' size='icon' variant='ghost'>
+              <MenuIcon className='h-6 w-6' />
+              <span className='sr-only'>Toggle navigation</span>
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className='pl-3 pb-5'>
+          <div className="flex flex-col gap-6">
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Avatar>
+                  <AvatarImage alt="User avatar" src={user?.image} />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-0.5 text-sm">
+                  <div className="font-medium">{user?.name}</div>
+                  <div className="text-gray-500 dark:text-gray-400">
+                    {user.isTeacher ? "Teacher" : "Student"}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Button onClick={signIn}>Login</Button>
+            )}
+            {user && (user?.isTeacher ? <TeacherNav /> : <StudentNav />)}
+
+           {user &&  <Link
+              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+              href="#"
+              onClick={signOut}
+            >
+              <LogOutIcon className="h-4 w-4" />
+              Logout
+            </Link>}
+          </div>
+          </DrawerContent>
+        </Drawer>
         <Link className='flex items-center gap-2 font-semibold' href='/'>
           <BookIcon className='h-6 w-6' />
           <span className='text-lg font-bold'>Acme Edu</span>
@@ -126,13 +177,15 @@ const nav = () => {
                 <DropdownMenuSeparator />
 
                 {notifications?.map((notification) => (
-                  <DropdownMenuItem className='grid gap-2 p-4' key={notification._id}>
+                  <DropdownMenuItem
+                    className='grid gap-2 p-4'
+                    key={notification._id}>
                     <div className='flex items-center gap-3'>
                       {iconMap[notification.icon]}
                       <div>
                         <div className='font-medium'>{notification.title}</div>
                         <div className='text-sm text-gray-500 dark:text-gray-400'>
-                        {notification.content}
+                          {notification.content}
                         </div>
                       </div>
                     </div>
@@ -144,9 +197,12 @@ const nav = () => {
                 ))}
 
                 <DropdownMenuSeparator />
-               <Link href='/notifications'> <DropdownMenuItem className='flex items-center justify-center gap-2 p-4 text-sm font-medium text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800'>
-                  View all notifications
-                </DropdownMenuItem></Link>
+                <Link href='/notifications'>
+                  {" "}
+                  <DropdownMenuItem className='flex items-center justify-center gap-2 p-4 text-sm font-medium text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800'>
+                    View all notifications
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
           </>
