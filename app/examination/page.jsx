@@ -184,10 +184,10 @@ const page = () => {
 
   return (
     <main className='flex-1 overflow-auto'>
-      <div className='grid gap-6 p-6 md:p-10'>
+      <div className='grid gap-6 p-0  md:p-10'>
         <div className='grid grid-cols-1 gap-6'>
-          <Card className='pt-10'>
-            <CardContent>
+          <Card className='p-0 pt-5 m-0 border-0 shadow-none md:shadow md:p-6 md:border md:pt-10 '>
+            <CardContent className='p-0  md:p-6 '>
               <div className='grid gap-6'>
                 <div className='grid gap-4'>
                   <div className='rounded-lg overflow-hidden p-6'>
