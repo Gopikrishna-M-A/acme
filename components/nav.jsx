@@ -157,7 +157,7 @@ const nav = () => {
         </Drawer>
         <Link className='flex items-center gap-2 font-semibold' href='/'>
           <BookIcon className='h-6 w-6' />
-          <span className='text-lg font-bold'>Acme Edu</span>
+          <span className='text-lg font-bold'>Evalio</span>
         </Link>
       </div>
       <div className='flex items-center gap-4'>

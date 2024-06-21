@@ -46,7 +46,7 @@ export const options = {
 };
 
 function determineIfTeacher(profile) {
-    const teacherEmails = ['gopikrishna6003@gmail.com']
+    const teacherEmails = ['gopikrishna6003@gmail.com','abrahamvarghese77@gmail.com']
     // const teacherEmails = ['abc@gmail.com']; 
     return teacherEmails.includes(profile.email)
   }
